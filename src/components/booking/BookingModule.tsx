@@ -45,12 +45,12 @@ export function BookingModule() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
       <div className="lg:col-span-2">
         {step === 'selection' ? (
-          <Card>
+          <Card className="shadow-xl border-accent/10">
             <CardHeader>
-              <CardTitle>Book an Appointment</CardTitle>
+              <CardTitle className="text-2xl font-black text-primary">Book an Appointment</CardTitle>
               <CardDescription>Select a service, date and time for your visit.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -109,19 +109,20 @@ export function BookingModule() {
             </CardContent>
           </Card>
         ) : (
-          <Card className="border-green-500/50 bg-green-50/50 dark:bg-green-900/10">
-            <CardContent className="pt-10 pb-10 flex flex-col items-center text-center">
-              <div className="h-20 w-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle2 className="h-10 w-10 text-green-600 dark:text-green-400" />
+          <Card className="border-green-500/50 bg-green-500/5 shadow-2xl animate-in zoom-in-95 duration-500">
+            <CardContent className="py-16 flex flex-col items-center text-center">
+              <div className="h-24 w-24 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-green-500/20">
+                <CheckCircle2 className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-2">Booking Confirmed!</h2>
-              <p className="text-muted-foreground mb-8 max-w-sm">
+              <p className="text-muted-foreground mb-8 max-w-md">
                 Your appointment for <span className="font-semibold text-foreground">{service}</span> on 
-                <span className="font-semibold text-foreground"> {date && format(date, 'PPP')} at {time}</span> has been successfully scheduled.
+                <span className="font-semibold text-foreground"> {date ? format(date, 'MMMM d, yyyy') : ''}</span> at 
+                <span className="font-semibold text-foreground"> {time}</span> has been confirmed.
               </p>
               <div className="flex gap-4">
                 <Button onClick={() => setStep('selection')}>Book Another</Button>
-                <Button variant="outline" onClick={() => window.location.hash = '#my-appointments'}>View My Appointments</Button>
+                <Button variant="outline">Add to Calendar</Button>
               </div>
             </CardContent>
           </Card>
@@ -129,9 +130,9 @@ export function BookingModule() {
       </div>
 
       <div className="lg:col-span-1">
-        <Card className="h-full">
+        <Card className="h-full glass shadow-xl">
           <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="text-xl font-bold flex items-center gap-2 text-primary">
               <CalendarIcon className="h-5 w-5" /> My Appointments
             </CardTitle>
           </CardHeader>
@@ -146,16 +147,16 @@ export function BookingModule() {
                 ) : (
                   [...appointments].reverse().map((apt) => (
                     <div key={apt.id} className="p-3 border rounded-lg bg-card/50">
-                      <div className="flex justify-between items-start mb-1">
+                      <div className="flex justify-between items-start mb-2">
                         <span className="text-xs font-bold uppercase tracking-wider text-primary">{apt.service}</span>
                         <Badge variant="outline" className="text-[10px]">{apt.status}</Badge>
                       </div>
                       <div className="flex items-center gap-2 text-sm mt-2">
-                        <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                        <CalendarIcon className="h-3.5 w-3.5 text-gold" />
                         <span>{format(new Date(apt.date), 'MMM d, yyyy')}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm mt-1">
-                        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                        <Clock className="h-3.5 w-3.5 text-gold" />
                         <span>{apt.time}</span>
                       </div>
                       <div className="mt-3 flex items-center gap-2">

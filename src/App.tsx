@@ -1,47 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   CalendarCheck, 
-  Map as MapIcon, 
-  Mic2, 
+  MapPin, 
+  MessageSquare, 
   Menu, 
   Bell, 
   User, 
   Settings, 
   LogOut,
-  Wifi,
-  WifiOff,
   Sun,
-  Moon
+  Moon,
+  Briefcase,
+  FileText,
+  ShieldCheck,
+  AlertTriangle,
+  BarChart3,
+  Search,
+  Globe
 } from 'lucide-react';
-import { ConnectivityBanner } from '@/components/connectivity/ConnectivityBanner';
-import { VoiceInterface } from '@/components/voice/VoiceInterface';
+import { CitizenDashboard } from '@/components/dashboard/CitizenDashboard';
+import { AIAssistant } from '@/components/assistant/AIAssistant';
+import { ServiceDirectory } from '@/components/services/ServiceDirectory';
+import { FraudReporting } from '@/components/fraud/FraudReporting';
+import { DocumentVerification } from '@/components/verification/DocumentVerification';
+import { AnalyticsPage } from '@/components/analytics/AnalyticsPage';
 import { OfficeMap } from '@/components/map/OfficeMap';
 import { BookingModule } from '@/components/booking/BookingModule';
-import { AccessibilityAuditor } from '@/components/accessibility/AccessibilityAuditor';
-import { ImpactOverview } from '@/components/analytics/ImpactOverview';
+import { ConnectivityBanner } from '@/components/connectivity/ConnectivityBanner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
-
-function App() {
+export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [language, setLanguage] = useState('English');
 
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
-  };
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'assistant', label: 'AI Assistant', icon: MessageSquare },
+    { id: 'services', label: 'Government Services', icon: Briefcase },
+    { id: 'applications', label: 'My Applications', icon: FileText },
+    { id: 'verification', label: 'Document Verification', icon: ShieldCheck },
+    { id: 'fraud', label: 'Report Fraud', icon: AlertTriangle },
+    { id: 'map', label: 'Office Locator', icon: MapPin },
     { id: 'booking', label: 'Appointments', icon: CalendarCheck },
-    { id: 'map', label: 'Office Map', icon: MapIcon },
-    { id: 'assistant', label: 'AI Assistant', icon: Mic2 },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
@@ -51,7 +70,7 @@ function App() {
 
       {/* Mobile sidebar backdrop */}
       {isSidebarOpen && (
-        <div
+        <div 
           className="fixed inset-0 z-30 bg-black/50 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -65,11 +84,11 @@ function App() {
         <div className="h-full flex flex-col p-4">
           <div className="flex items-center gap-3 px-2 mb-8">
             <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center">
-              <span className="text-primary-foreground font-black text-xl">C</span>
+              <span className="text-primary-foreground font-black text-xl text-gold">S</span>
             </div>
             <div>
-              <h1 className="font-bold text-lg leading-tight">CitizenPortal</h1>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Government Services</p>
+              <h1 className="font-bold text-lg leading-tight">SmartGov AI</h1>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Citizen Portal</p>
             </div>
           </div>
 
@@ -77,7 +96,10 @@ function App() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsSidebarOpen(false);
+                }}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   activeTab === item.id 
@@ -93,8 +115,8 @@ function App() {
 
           <div className="mt-auto pt-4 border-t space-y-1">
             <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-              <Settings className="h-5 w-5" />
-              Settings
+              <User className="h-5 w-5" />
+              My Profile
             </button>
             <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors">
               <LogOut className="h-5 w-5" />
@@ -105,7 +127,7 @@ function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 bg-background/50">
         <header className="h-16 border-b flex items-center justify-between px-6 sticky top-0 bg-background/80 backdrop-blur-md z-30">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -117,6 +139,10 @@ function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <div className="hidden md:flex items-center bg-accent/50 rounded-full px-3 py-1 mr-2 border border-accent/20">
+              <Globe className="h-3.5 w-3.5 mr-2 text-primary" />
+              <span className="text-xs font-medium">{language}</span>
+            </div>
             <Button variant="outline" size="icon" className="rounded-full" onClick={toggleTheme}>
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -126,80 +152,44 @@ function App() {
             </Button>
             <Separator orientation="vertical" className="h-6" />
             <div className="flex items-center gap-2 pl-2">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold">John Citizen</p>
-                <p className="text-[10px] text-muted-foreground">ID: 8829-XJ</p>
-              </div>
-              <div className="h-9 w-9 bg-accent rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-muted-foreground" />
+              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs border-2 border-gold shadow-sm">
+                JO
               </div>
             </div>
           </div>
         </header>
 
         <div className="flex-1 p-6 overflow-auto">
-          {activeTab === 'dashboard' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                <div className="xl:col-span-2 space-y-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-primary/5 p-6 rounded-2xl border border-primary/10">
-                    <div className="space-y-1">
-                      <h3 className="text-2xl font-bold">Welcome back, John!</h3>
-                      <p className="text-muted-foreground">You have 2 upcoming appointments and 1 pending notification.</p>
-                    </div>
-                    <Button onClick={() => setActiveTab('booking')}>New Appointment</Button>
-                  </div>
-                  
-                  <ImpactOverview />
-                </div>
-                <div className="xl:col-span-1 space-y-6">
-                  <AccessibilityAuditor />
-                  
-                  <Card>
-                    <div className="p-6">
-                      <h4 className="font-bold mb-4">Network Simulator</h4>
-                      <p className="text-xs text-muted-foreground mb-4">Toggle offline mode to test the connectivity banner and local caching.</p>
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-between"
-                        onClick={() => {
-                           // Mocking navigator.onLine is hard, so we just trigger the banner manually in a real app
-                           // But for this demo, we'll use a custom event or just trust the window event
-                           window.dispatchEvent(new Event(navigator.onLine ? 'offline' : 'online'));
-                        }}
-                      >
-                        {navigator.onLine ? <Wifi className="h-4 w-4 mr-2" /> : <WifiOff className="h-4 w-4 mr-2" />}
-                        Simulate {navigator.onLine ? 'Offline' : 'Online'}
-                        <Badge variant="secondary" className="ml-2">TEST</Badge>
-                      </Button>
-                    </div>
-                  </Card>
-                </div>
-              </div>
+          {activeTab === 'dashboard' && <CitizenDashboard onNavigate={setActiveTab} />}
+          {activeTab === 'assistant' && <AIAssistant />}
+          {activeTab === 'services' && <ServiceDirectory />}
+          {activeTab === 'applications' && (
+            <div className="p-8 text-center bg-card rounded-xl border shadow-sm">
+              <FileText className="h-12 w-12 text-primary mx-auto mb-4 opacity-50" />
+              <h2 className="text-2xl font-bold">My Applications</h2>
+              <p className="text-muted-foreground mt-2 max-w-md mx-auto">Track your active government applications, submitted forms, and pending requests in one place.</p>
+              <Button className="mt-6">Submit New Application</Button>
             </div>
           )}
-
-          {activeTab === 'booking' && <BookingModule />}
+          {activeTab === 'verification' && <DocumentVerification />}
+          {activeTab === 'fraud' && <FraudReporting />}
           {activeTab === 'map' && <OfficeMap />}
-          {activeTab === 'assistant' && (
-            <div className="max-w-2xl mx-auto py-12 space-y-8">
-              <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold">AI Voice Assistant</h2>
-                <p className="text-muted-foreground">Ask questions about government services, office hours, or book appointments using your voice.</p>
-              </div>
-              <VoiceInterface />
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  "Where is the nearest Registry office?",
-                  "When does City Hall close today?",
-                  "I want to book a passport renewal",
-                  "What is my accessibility score?"
-                ].map((q) => (
-                  <button key={q} className="p-4 text-left rounded-xl border bg-card hover:bg-accent transition-colors text-sm font-medium">
-                    "{q}"
-                  </button>
-                ))}
+          {activeTab === 'booking' && <BookingModule />}
+          {activeTab === 'analytics' && <AnalyticsPage />}
+          {activeTab === 'settings' && (
+            <div className="p-8 text-center bg-card rounded-xl border shadow-sm">
+              <Settings className="h-12 w-12 text-primary mx-auto mb-4 opacity-50" />
+              <h2 className="text-2xl font-bold">Settings</h2>
+              <p className="text-muted-foreground mt-2 max-w-md mx-auto">Manage your profile, account security, notification preferences, and application theme.</p>
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
+                <Card className="p-4 hover:bg-accent/50 cursor-pointer transition-colors">
+                  <h3 className="font-bold">Security</h3>
+                  <p className="text-xs text-muted-foreground">Manage your 2FA and passwords</p>
+                </Card>
+                <Card className="p-4 hover:bg-accent/50 cursor-pointer transition-colors" onClick={() => setLanguage(language === 'English' ? 'Hausa' : 'English')}>
+                  <h3 className="font-bold">Language</h3>
+                  <p className="text-xs text-muted-foreground">Current: {language}</p>
+                </Card>
               </div>
             </div>
           )}
@@ -208,5 +198,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

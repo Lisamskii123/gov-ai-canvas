@@ -1,68 +1,80 @@
-# Implementation Plan - Voice UI, Offline Indicators, Government Maps, Booking Module, and Accessibility Score
+# Implementation Plan - SmartGov AI Platform Redesign
 
-This plan outlines the implementation of a comprehensive feature set for a Citizen Dashboard, focusing on voice interaction, connectivity resilience, spatial information, service scheduling, and accessibility transparency.
+This plan outlines the transformation of the Citizen Portal into **SmartGov AI**, an enterprise-grade digital governance platform for Nigeria. The redesign focuses on a national theme (green, white, gold), expanded service offerings, AI-driven features, and comprehensive analytics.
 
 ## Scope Summary
-- **Voice UI:** Microphone component with visual listening states and mock audio feedback.
-- **Connectivity Status:** UI banner for "Disconnected" and "Syncing..." states using client-side caching.
-- **Government Office Map:** Interactive map with search, markers, and detail pop-ups.
-- **Appointment Booking:** Calendar-based booking system with confirmation and a 'My Appointments' view.
-- **Accessibility Score:** Real-time WCAG compliance indicator highlighting failing elements.
-- **Impact Overview:** Analytics dashboard visualizing citizen time saved and services delivered.
+- **Theming & Branding:** Rename to "SmartGov AI" and implement a premium Nigerian-inspired theme (Green, White, Gold) with glassmorphism and modern animations.
+- **Dashboard Redesign:** Create a personalized dashboard with quick access to AI Assistant, Services, Applications, etc.
+- **Expanded Navigation:** 11 distinct sections including Fraud Reporting, Document Verification, and Analytics.
+- **AI Citizen Assistant:** ChatGPT-like interface supporting English, Hausa, Yoruba, and Igbo.
+- **Government Services Directory:** Searchable directory with eligibility and document requirements.
+- **Fraud & Corruption Reporting:** Secure, anonymous reporting with tracking and evidence upload.
+- **AI Document Verification:** Tool for checking document completeness and issues.
+- **Analytics Dashboard:** Visualizing national-level KPIs like citizens served and fraud reports.
+- **Refined Maps & Bookings:** Integrating previous features into the new enterprise UI.
 
 ## Non-Goals
-- Real backend voice-to-text or text-to-speech (simulated only).
-- Actual email sending (simulated/mocked).
-- Live server-side database (client-side `localStorage` persistence only).
-- Real production-grade WCAG crawler (simulated score based on DOM attributes).
+- Real-time multi-lingual translation (using pre-defined mock strings).
+- Real government API integrations (simulated service directory and status tracking).
+- Real document parsing (simulated AI feedback based on "uploading" a file).
 
-## Assumptions
-- The application is a React-based SPA.
-- Lucide React icons are available for UI indicators.
-- Recharts or similar for the Analytics Dashboard.
-- Map implementation will use a lightweight library or a simulated grid if API keys are restricted.
+## Auth & RLS model
+**Auth in scope:** no (client-side state only)
+**Model:** no_auth_public_read
+**RLS strategy:** n/a
+**Frontend implication:** User profile is simulated; state managed via `localStorage`.
+
+## Migration baseline
+**Local migrations in project:** none
+**User confirmed proceed on connected DB:** not_applicable
 
 ## Affected Areas
-- `src/components/voice/`: Voice UI components.
-- `src/components/connectivity/`: Offline/Syncing indicators.
-- `src/components/map/`: Interactive map and search.
-- `src/components/booking/`: Calendar and booking logic.
-- `src/components/accessibility/`: Score display and overlay.
-- `src/components/analytics/`: Impact overview charts.
-- `src/hooks/`: Hooks for online status and data persistence.
-- `src/App.tsx`: Main layout integration.
+- `src/index.css`: Global theme variables and glassmorphism styles.
+- `src/App.tsx`: Main navigation logic, layout structure, and state management.
+- `src/components/dashboard/`: New Dashboard layout and widgets.
+- `src/components/assistant/`: ChatGPT-style interface with language switcher.
+- `src/components/services/`: Services directory and card components.
+- `src/components/fraud/`: Fraud reporting forms and tracking.
+- `src/components/verification/`: Document upload and feedback UI.
+- `src/components/analytics/`: Expanded KPI cards and charts.
+- `src/components/ui/`: Potentially extending base UI for gold/green variants.
 
 ## Ordered Phases
 
-### Phase 1: Infrastructure & Shared State
-- Implement `useOnlineStatus` hook to track connectivity.
-- Implement `useLocalStorage` hook for client-side persistence of appointments and UI settings.
+### Phase 1: Branding & Global Styles
+- Update `src/index.css` with Nigerian-inspired color palette (Deep Green, Pure White, Metallic Gold).
+- Define glassmorphism and premium animation classes (Tailwind/Framer Motion).
 - **Owner:** frontend_engineer
 
-### Phase 2: Connectivity & Voice UI
-- Create `ConnectivityBanner` with "Disconnected" and "Syncing..." transitions.
-- Create `VoiceInterface` with animated microphone icon (Idle, Listening, Processing).
+### Phase 2: Navigation & Core Layout
+- Update `src/App.tsx` to include the expanded 11-item menu and the SmartGov AI branding.
+- Implement the page switching logic for all new routes.
 - **Owner:** frontend_engineer
 
-### Phase 3: Interactive Map & Search
-- Implement `OfficeMap` using a map library (e.g., Leaflet) or a custom SVG-based interactive grid.
-- Add search and filter functionality for office locations.
+### Phase 3: Personalized Dashboard
+- Build the new Dashboard with the requested widgets (Emergency Alerts, Announcements, Quick Actions).
+- Integrate existing Impact Overview into the new design.
 - **Owner:** frontend_engineer
 
-### Phase 4: Appointment Booking Module
-- Build `BookingCalendar` for date/time selection.
-- Build `AppointmentList` for the 'My Appointments' section in the dashboard.
-- Implement logic for mock reminders.
+### Phase 4: AI Assistant & Services
+- Build the ChatGPT-like `AIAssistant` component with a language switcher (English, Hausa, Yoruba, Igbo).
+- Create the `ServiceDirectory` with searchable service cards and detail view.
 - **Owner:** frontend_engineer
 
-### Phase 5: Accessibility Score & Analytics
-- Create `AccessibilityAuditor` component that scans the DOM for common missing attributes (e.g., `alt`, `aria-label`).
-- Implement `ImpactOverview` with Recharts showing "Time Saved" and "Services Delivered".
+### Phase 5: Specialist Modules (Fraud & Verification)
+- Implement `FraudReporting` with anonymous mode and tracking ID generation.
+- Implement `DocumentVerification` with simulated "AI Analysis" progress states.
 - **Owner:** frontend_engineer
 
-### Phase 6: Final Integration & Refinement
-- Integrate all modules into the main `App.tsx` layout.
-- Polish CSS transitions and responsive design.
+### Phase 6: Analytics & Interactive Map Refinement
+- Update `ImpactOverview` into a full `AnalyticsPage` with KPI cards.
+- Refine the existing `OfficeMap` to match the new enterprise theme.
+- **Owner:** frontend_engineer
+
+### Phase 7: Polish & Transition
+- Add smooth transitions between pages.
+- Ensure all "My Applications" and "Appointments" states are persistent via `localStorage`.
+- Final CSS cleanup.
 - **Owner:** quick_fix_engineer
 
 ## Execution Handoff
@@ -70,20 +82,20 @@ This plan outlines the implementation of a comprehensive feature set for a Citiz
 **Plan status:** ready
 
 **Dispatch order:**
-1. frontend_engineer — Build core features and complex UI components.
-2. quick_fix_engineer — Layout polish and minor text/CSS adjustments.
+1. frontend_engineer — Complete core redesign and all functional pages.
+2. quick_fix_engineer — Final polish, transitions, and text consistency.
 
 **Per-agent instructions:**
 ### 1. frontend_engineer
-- **Phases:** 1, 2, 3, 4, 5
-- **Scope:** Build all core functional components including the Voice UI animations, Offline state transitions, Map integration, Appointment logic (using localStorage), Accessibility scanner, and Analytics charts.
-- **Files:** `src/hooks/*`, `src/components/**/*`, `src/App.tsx`
+- **Phases:** 1, 2, 3, 4, 5, 6
+- **Scope:** Complete overhaul. Update CSS variables in `index.css` for Green (#008751), Gold (#CFB53B), and White. Redesign `App.tsx` navigation. Build all 7+ new pages (Assistant, Services, Fraud, etc.).
+- **Files:** `src/index.css`, `src/App.tsx`, `src/components/**/*`
 - **Depends on:** none
-- **Acceptance criteria:** Voice icon animates; Offline banner appears when network is simulated as off; Map markers are clickable; Appointments save to localStorage; Charts render correctly.
+- **Acceptance criteria:** App renamed to SmartGov AI; Theme is green/gold; 11 nav items work; AI page feels like a chat interface; Fraud reporting generates a tracking ID; Analytics shows KPI cards.
 
 ### 2. quick_fix_engineer
-- **Phases:** 6
-- **Scope:** Refine the final layout, ensure consistent spacing, fix any typos in the "Impact Overview" or "Disconnected" banners.
+- **Phases:** 7
+- **Scope:** Refine animations, ensure glassmorphism is consistent, check for typos in government service descriptions, and ensure mobile responsiveness on the new analytics charts.
 - **Files:** `src/index.css`, `src/App.tsx`
 - **Depends on:** frontend_engineer
-- **Acceptance criteria:** Layout is responsive and visually cohesive across all new modules.
+- **Acceptance criteria:** Seamless page transitions; no overlapping elements on mobile; correct Nigerian spelling/titles.

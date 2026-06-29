@@ -41,9 +41,9 @@ export function OfficeMap() {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 h-[600px]">
-      <Card className="w-full md:w-80 flex flex-col">
+      <Card className="w-full md:w-80 flex flex-col shadow-xl border-accent/10">
         <CardHeader className="p-4 pb-2">
-          <CardTitle className="text-lg">Office Locations</CardTitle>
+          <CardTitle className="text-xl font-black text-primary">Office Locator</CardTitle>
           <div className="relative mt-2">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -61,14 +61,14 @@ export function OfficeMap() {
                 <div
                   key={office.id}
                   className={cn(
-                    "p-3 rounded-lg border cursor-pointer transition-colors hover:bg-accent",
-                    selectedOffice?.id === office.id ? "border-primary bg-primary/5" : "border-border"
+                    "p-3 rounded-xl border cursor-pointer transition-all hover:shadow-md",
+                    selectedOffice?.id === office.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border"
                   )}
                   onClick={() => setSelectedOffice(office)}
                 >
                   <div className="flex items-start justify-between">
                     <h4 className="font-semibold text-sm">{office.name}</h4>
-                    <Badge variant={office.status === 'Open' ? 'default' : 'secondary'} className="text-[10px] px-1 h-4">
+                    <Badge variant={office.status === 'Open' ? 'default' : 'secondary'} className={cn("text-[10px] px-1 h-4", office.status === 'Open' ? "bg-green-600" : "")}>
                       {office.status}
                     </Badge>
                   </div>
@@ -115,7 +115,7 @@ export function OfficeMap() {
                 "p-1.5 rounded-full shadow-lg border-2",
                 selectedOffice?.id === office.id 
                   ? "bg-primary text-primary-foreground border-white scale-110 z-10" 
-                  : "bg-white text-primary border-primary"
+                  : "bg-white text-primary border-primary hover:border-accent"
               )}>
                 <MapPin className="h-5 w-5" />
               </div>
@@ -126,11 +126,11 @@ export function OfficeMap() {
         {/* Detail Popup */}
         <AnimatePresence>
           {selectedOffice && (
-            <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-4 md:w-72 bg-card border rounded-lg shadow-2xl p-4 animate-in slide-in-from-bottom-4">
+            <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-4 md:w-80 glass-dark border-gold/30 rounded-2xl shadow-2xl p-6 animate-in slide-in-from-right-4 duration-500">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <Badge className="mb-1">{selectedOffice.type}</Badge>
-                  <h3 className="font-bold text-base leading-tight">{selectedOffice.name}</h3>
+                  <Badge className="mb-1 bg-accent/20 text-gold border-gold/30">{selectedOffice.type}</Badge>
+                  <h3 className="font-black text-lg leading-tight text-white">{selectedOffice.name}</h3>
                 </div>
                 <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 -mt-1" onClick={() => setSelectedOffice(null)}>
                   <X className="h-4 w-4" />
@@ -139,24 +139,24 @@ export function OfficeMap() {
               
               <div className="space-y-2 mt-3">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
+                  <MapPin className="h-4 w-4 text-gold" />
                   <span>{selectedOffice.address}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="h-4 w-4" />
+                  <Clock className="h-4 w-4 text-gold" />
                   <span>{selectedOffice.hours}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Phone className="h-4 w-4" />
+                  <Phone className="h-4 w-4 text-gold" />
                   <span>{selectedOffice.phone}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 mt-4">
-                <Button size="sm" className="w-full">
+                <Button size="sm" className="w-full bg-primary hover:bg-primary/90">
                   <Navigation className="h-3 w-3 mr-1" /> Route
                 </Button>
-                <Button size="sm" variant="outline" className="w-full">
+                <Button size="sm" variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
                   <Info className="h-3 w-3 mr-1" /> Details
                 </Button>
               </div>
